@@ -1,6 +1,6 @@
 package crudpreentrega;
 
-public abstract class Producto {
+public abstract class Producto implements Vendible {
 
     private int id;
     private String nombre;
