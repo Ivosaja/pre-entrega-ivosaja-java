@@ -20,16 +20,14 @@ public class CrudCategorias extends CrudConsola<Categoria> {
         System.out.println("3) Actualizar Categoria");
         System.out.println("4) Eliminar Categoria");
         System.out.println("5) Volver");
-        System.out.print("Opcion: ");
     }
 
     @Override
     public void crear() {
-        System.out.print("Ingrese el nombre: ");
-        String nombre = scanner.nextLine();
+        String nombre = super.leerString("Ingrese el nombre: ");
         Categoria nuevaCategoria = new Categoria(nombre);
         this.categorias.add(nuevaCategoria);
-        System.out.println("Categoria " + nuevaCategoria.getNombre() + " creada con exito");
+        System.out.println("Categoria '" + nuevaCategoria.getNombre() + "' creada con exito");
 
     }
 
@@ -48,18 +46,15 @@ public class CrudCategorias extends CrudConsola<Categoria> {
     @Override
     public void actualizar() {
         this.listar();
-        System.out.print("Ingrese el ID de la categoria a actualizar: ");
-        int idCategoria = scanner.nextInt();
-        scanner.nextLine();
+        int idCategoria = super.leerEntero("Ingrese el ID de la categoria a actualizar: ");
 
-        Categoria c = buscarCategoriaPorId(idCategoria, this.categorias);
+        Categoria c = super.buscarCategoriaPorId(idCategoria, this.categorias);
         if(c == null){
             System.out.println("Categoria no encontrada");
             return;
         }
 
-        System.out.print("Nuevo nombre: ");
-        String nuevoNombre = scanner.nextLine();
+        String nuevoNombre = super.leerString("Nuevo nombre: ");
         c.setNombre(nuevoNombre);
         System.out.println("Categoria actualizada con exito");
 
@@ -67,12 +62,10 @@ public class CrudCategorias extends CrudConsola<Categoria> {
 
     @Override
     public void eliminar() {
-        System.out.println("Categorias disponibles:");
         this.listar();
-        System.out.print("Ingrese el ID de la categoria a eliminar: ");
-        int idCategoria = scanner.nextInt();
+        int idCategoria = super.leerEntero("Ingrese el ID de la categoria a eliminar: ");
 
-        Categoria c = buscarCategoriaPorId(idCategoria, this.categorias);
+        Categoria c = super.buscarCategoriaPorId(idCategoria, this.categorias);
         if(c == null){
             System.out.println("Categoria no encontrada");
             return;

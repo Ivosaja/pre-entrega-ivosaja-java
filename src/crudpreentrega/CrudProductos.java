@@ -19,39 +19,33 @@ public class CrudProductos extends CrudConsola<Producto> {
         System.out.println("3) Actualizar Producto");
         System.out.println("4) Eliminar Producto");
         System.out.println("5) Volver");
-        System.out.print("Opcion: ");
     }
 
     @Override
     public void crear() {
-        System.out.println("Que tipo de producto desea crear?");
         System.out.println("1) Articulo");
         System.out.println("2) Servicio");
-        System.out.print("Opcion: ");
-        int opcionProducto = scanner.nextInt();
-        scanner.nextLine();
+        int opcionProducto = super.leerEntero("Que tipo de producto desea crear? (1/2): ");
 
         if(opcionProducto == 1){
-            System.out.print("Ingrese el nombre: ");
-            String nombreArticulo = scanner.nextLine();
-            System.out.print("Ingrese el precio: ");
-            double precioArticulo = scanner.nextDouble();
-            precioArticulo = this.validarPrecio(precioArticulo); // Valido el precio del articulo
-            scanner.nextLine();
-
+            // Primero valido si no tiene categorias para que no cargue datos si despues no le va a dejar crear un articulo ya que
+            // no hay categorias
             if(categorias.isEmpty()){
                 System.out.println("No hay categorias cargadas. Crea la primera para crear un articulo");
                 return;
             }
+
+            String nombreArticulo = super.leerString("Ingrese el nombre: ");
+            double precioArticulo = super.leerDouble("Ingrese el precio: ");
+            precioArticulo = this.validarPrecio(precioArticulo); // Valido el precio del articulo
+
             System.out.println("Categorias disponibles: ");
             for(Categoria categoria : this.categorias){
                 System.out.println(categoria);
             }
-            System.out.print("Ingrese el ID de la categoria para el nuevo articulo: ");
-            int idCategoria = scanner.nextInt();
-            scanner.nextLine();
+            int idCategoria = super.leerEntero("Ingrese el ID de la categoria para el nuevo articulo: ");
 
-            Categoria c = buscarCategoriaPorId(idCategoria, this.categorias);
+            Categoria c = super.buscarCategoriaPorId(idCategoria, this.categorias);
             if(c == null){
                 System.out.println("Categoria no encontrada");
                 return;
@@ -59,22 +53,17 @@ public class CrudProductos extends CrudConsola<Producto> {
             this.productos.add(new Articulo(nombreArticulo, precioArticulo, c));
             System.out.println("Articulo '" + nombreArticulo + "' creado con exito");
 
-        }
-
-        else if(opcionProducto == 2){
-            System.out.print("Ingrese el nombre: ");
-            String nombreServicio = scanner.nextLine();
-            System.out.print("Ingrese el precio: ");
-            double precioServicio = scanner.nextDouble();
+        } else if(opcionProducto == 2){
+            String nombreServicio = super.leerString("Ingrese el nombre: ");
+            double precioServicio = super.leerDouble("Ingrese el precio: ");
             precioServicio = this.validarPrecio(precioServicio); // Valido el precio del servicio
 
-            scanner.nextLine();
-            System.out.print("Ingrese la duracion (en minutos): ");
-            int duracion = scanner.nextInt();
+            int duracion = super.leerEntero("Ingrese la duracion del servicio (en minutos): ");
             duracion = this.validarDuracion(duracion); // Valido la duracion en minutos del servicio
 
             this.productos.add(new Servicio(nombreServicio, precioServicio, duracion));
             System.out.println("Servicio '" + nombreServicio + "' creado con exito");
+
         } else {
             System.out.println("Opcion invalida");
         }
@@ -96,18 +85,15 @@ public class CrudProductos extends CrudConsola<Producto> {
     @Override
     public void actualizar() {
         this.listar();
-        System.out.print("Ingrese el ID del producto a actualizar: ");
-        int idProducto = scanner.nextInt();
-        scanner.nextLine();
+        int idProducto = super.leerEntero("Ingrese el ID del producto a actualizar: ");
 
         // Busco el producto que desea actualizar el usuario
-        Producto p = buscarProductoPorId(idProducto, this.productos);
+        Producto p = super.buscarProductoPorId(idProducto, this.productos);
         if(p == null){
             System.out.println("Producto no encontrado");
             return;
         }
 
-        System.out.println("Que desea modificar del producto?");
         System.out.println("1) Nombre");
         System.out.println("2) Precio");
         if(p instanceof Articulo){
@@ -117,35 +103,32 @@ public class CrudProductos extends CrudConsola<Producto> {
             System.out.println("3) Duracion");
         }
 
-        System.out.print("Opcion: ");
-        int opcionCambioProducto = scanner.nextInt();
-        scanner.nextLine();
+        int opcionCambioProducto = super.leerEntero("Que desea modificar del producto? (1/2/3): ");
         switch (opcionCambioProducto){
             case 1 -> {
-                System.out.print("Nuevo nombre: ");
-                String nuevoNombre = scanner.nextLine();
+                String nuevoNombre = super.leerString("Nuevo nombre: ");
                 p.setNombre(nuevoNombre);
+                System.out.println("Nombre de producto modificado con exito");
             }
             case 2 -> {
-                System.out.print("Nuevo precio: ");
-                double nuevoPrecio = scanner.nextDouble();
+                double nuevoPrecio = super.leerDouble("Nuevo precio: ");
                 nuevoPrecio = this.validarPrecio(nuevoPrecio); // Valido el nuevo precio del producto
-                scanner.nextLine();
                 p.setPrecio(nuevoPrecio);
+                System.out.println("Precio de producto modificado con exito");
             }
             case 3 -> {
                 if(p instanceof Articulo){
                     Articulo a = (Articulo) p;
-                    System.out.print("Nueva categoria: ");
-                    String nuevaCategoria = scanner.nextLine();
+                    String nuevaCategoria = super.leerString("Nueva categoria: ");
                     a.setCategoria(new Categoria(nuevaCategoria));
+                    System.out.println("Categoria de articulo modificada con exito");
+
                 } else if(p instanceof Servicio){
                     Servicio s = (Servicio) p;
-                    System.out.print("Nueva duracion: ");
-                    int nuevaDuracion = scanner.nextInt();
+                    int nuevaDuracion = super.leerEntero("Nueva duracion: ");
                     nuevaDuracion = this.validarDuracion(nuevaDuracion); // Valido la nueva duracion del servicio al actualizar
-                    scanner.nextLine();
                     s.setDuracion(nuevaDuracion);
+                    System.out.println("Duracion de servicio modificada con exito");
                 }
             }
             default -> System.out.println("Opcion invalida");
@@ -155,12 +138,10 @@ public class CrudProductos extends CrudConsola<Producto> {
 
     @Override
     public void eliminar() {
-        System.out.println("Productos disponibles:");
         this.listar();
-        System.out.print("Ingrese el ID del producto a eliminar: ");
-        int idProducto = scanner.nextInt();
+        int idProducto = super.leerEntero("Ingrese el ID del producto a eliminar: ");
 
-        Producto p = buscarProductoPorId(idProducto, this.productos);
+        Producto p = super.buscarProductoPorId(idProducto, this.productos);
         if(p == null){
             System.out.println("Producto no encontrado");
             return;
@@ -175,8 +156,7 @@ public class CrudProductos extends CrudConsola<Producto> {
     private double validarPrecio(double precio){
         while (precio < 0) {
             System.out.println("Error, el precio del producto no puede ser negativo");
-            System.out.print("Ingrese el precio del producto: ");
-            precio = scanner.nextDouble();
+            precio = super.leerDouble("Ingrese el precio del producto: ");
         }
         return precio;
     }
@@ -184,8 +164,7 @@ public class CrudProductos extends CrudConsola<Producto> {
     private int validarDuracion(int duracion){
         while(duracion < 0){
             System.out.println("Error, la duracion del servicio no puede ser negativa");
-            System.out.print("Ingrese la duracion del servicio (en minutos): ");
-            duracion = scanner.nextInt();
+            duracion = super.leerEntero("Ingrese la duracion del servicio (en minutos): ");
         }
         return duracion;
     }

@@ -14,6 +14,37 @@ public abstract class CrudConsola<T> {
     public abstract void eliminar();
 
     // Metodos helpers para separar responsabilidad
+    protected int leerEntero(String mensaje){
+        while(true){
+            try{
+                System.out.print(mensaje);
+                String input = scanner.nextLine();
+                return Integer.parseInt(input.trim());
+
+            } catch(NumberFormatException e){
+                System.out.println("Error, debe ser un numero entero");
+            }
+        }
+    }
+
+    protected double leerDouble(String mensaje){
+        while(true){
+            try{
+                System.out.print(mensaje);
+                String input = scanner.nextLine();
+                return Double.parseDouble(input.trim());
+            } catch (NumberFormatException e){
+                System.out.println("Error, debe ingresar un numero con punto");
+            }
+        }
+    }
+
+    protected String leerString(String mensaje){
+        System.out.print(mensaje);
+        return scanner.nextLine();
+
+    }
+
     protected Categoria buscarCategoriaPorId(int idCategoria, ArrayList<Categoria> categorias){
         for(Categoria categoria : categorias){
             if(categoria.getId() == idCategoria){
