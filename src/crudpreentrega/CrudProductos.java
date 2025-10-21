@@ -36,6 +36,7 @@ public class CrudProductos extends CrudConsola<Producto> {
             String nombreArticulo = scanner.nextLine();
             System.out.print("Ingrese el precio: ");
             double precioArticulo = scanner.nextDouble();
+            precioArticulo = this.validarPrecio(precioArticulo); // Valido el precio del articulo
             scanner.nextLine();
 
             if(categorias.isEmpty()){
@@ -65,13 +66,12 @@ public class CrudProductos extends CrudConsola<Producto> {
             String nombreServicio = scanner.nextLine();
             System.out.print("Ingrese el precio: ");
             double precioServicio = scanner.nextDouble();
+            precioServicio = this.validarPrecio(precioServicio); // Valido el precio del servicio
+
             scanner.nextLine();
             System.out.print("Ingrese la duracion (en minutos): ");
             int duracion = scanner.nextInt();
-            while(duracion < 0){
-                System.out.print("Error, la duracion no puede ser negativa. Ingrese una duracion valida: ");
-                duracion = scanner.nextInt();
-            }
+            duracion = this.validarDuracion(duracion); // Valido la duracion en minutos del servicio
 
             this.productos.add(new Servicio(nombreServicio, precioServicio, duracion));
             System.out.println("Servicio '" + nombreServicio + "' creado con exito");
@@ -129,6 +129,7 @@ public class CrudProductos extends CrudConsola<Producto> {
             case 2 -> {
                 System.out.print("Nuevo precio: ");
                 double nuevoPrecio = scanner.nextDouble();
+                nuevoPrecio = this.validarPrecio(nuevoPrecio); // Valido el nuevo precio del producto
                 scanner.nextLine();
                 p.setPrecio(nuevoPrecio);
             }
@@ -141,9 +142,10 @@ public class CrudProductos extends CrudConsola<Producto> {
                 } else if(p instanceof Servicio){
                     Servicio s = (Servicio) p;
                     System.out.print("Nueva duracion: ");
-                    int nuevoPrecio = scanner.nextInt();
+                    int nuevaDuracion = scanner.nextInt();
+                    nuevaDuracion = this.validarDuracion(nuevaDuracion); // Valido la nueva duracion del servicio al actualizar
                     scanner.nextLine();
-                    s.setDuracion(nuevoPrecio);
+                    s.setDuracion(nuevaDuracion);
                 }
             }
             default -> System.out.println("Opcion invalida");
@@ -167,5 +169,24 @@ public class CrudProductos extends CrudConsola<Producto> {
         this.productos.remove(p);
         System.out.println("Producto " + p.getNombre() + " con ID: " + p.getId() + " eliminado con exito");
 
+    }
+
+    // Metodos helpers del crud de productos
+    private double validarPrecio(double precio){
+        while (precio < 0) {
+            System.out.println("Error, el precio del producto no puede ser negativo");
+            System.out.print("Ingrese el precio del producto: ");
+            precio = scanner.nextDouble();
+        }
+        return precio;
+    }
+
+    private int validarDuracion(int duracion){
+        while(duracion < 0){
+            System.out.println("Error, la duracion del servicio no puede ser negativa");
+            System.out.print("Ingrese la duracion del servicio (en minutos): ");
+            duracion = scanner.nextInt();
+        }
+        return duracion;
     }
 }
