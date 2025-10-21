@@ -6,9 +6,12 @@ public class Main {
     public static void main(String[] args){
 
         final ArrayList<Categoria> categorias = new ArrayList<>();
+        final ArrayList<Producto> productos = new ArrayList<>();
 
-        // Inyeccion de dependencias al crud de categorias
-        CrudConsola<Categoria> crudCategorias = new CrudCategorias(categorias);
+        // Inyeccion de dependencias al crud de categorias y productos
+        CrudConsola<Categoria> crudCategorias = new CrudCategorias(productos, categorias);
+        CrudConsola<Producto> crudProductos = new CrudProductos(productos, categorias);
+
 
         int opcionMenuPrincipal;
         do {
@@ -20,8 +23,24 @@ public class Main {
 
             opcionMenuPrincipal = crudCategorias.scanner.nextInt();
             switch (opcionMenuPrincipal){
-                case 1 ->
-                        System.out.println("En desarrollo...");
+                case 1 -> {
+                    int opcionCrudProductos;
+                    do{
+                        crudProductos.mostrarMenu();
+                        opcionCrudProductos = crudProductos.scanner.nextInt();
+                        crudProductos.scanner.nextLine();
+                        switch (opcionCrudProductos){
+                            case 1 -> crudProductos.crear();
+                            case 2 -> crudProductos.listar();
+                            case 3 -> crudProductos.actualizar();
+                            case 4 -> crudProductos.eliminar();
+                            case 5 -> System.out.println("Adios!");
+                            default -> System.out.println("Opcion invalida");
+                        }
+
+                    } while(opcionCrudProductos != 5);
+                }
+
                 case 2 -> {
                     int opcionCrudCategorias;
                     do{
@@ -34,6 +53,7 @@ public class Main {
                             case 3 -> crudCategorias.actualizar();
                             case 4 -> crudCategorias.eliminar();
                             case 5 -> System.out.println("Adios!");
+                            default -> System.out.println("Opcion invalida");
                         }
                     } while(opcionCrudCategorias != 5);
                 }

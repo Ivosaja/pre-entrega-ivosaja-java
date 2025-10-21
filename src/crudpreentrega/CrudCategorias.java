@@ -5,8 +5,10 @@ import java.util.ArrayList;
 public class CrudCategorias extends CrudConsola<Categoria> {
 
     private ArrayList<Categoria> categorias;
+    private ArrayList<Producto> productos;
 
-    public CrudCategorias(ArrayList<Categoria> categorias){
+    public CrudCategorias(ArrayList<Producto> productos, ArrayList<Categoria> categorias){
+        this.productos = productos;
         this.categorias = categorias;
     }
 
@@ -37,6 +39,7 @@ public class CrudCategorias extends CrudConsola<Categoria> {
             System.out.println("No hay categorias cargadas. Crea la primera");
             return;
         }
+        System.out.println("Categorias disponibles:");
         for(Categoria c : this.categorias){
             System.out.println(c);
         }
@@ -44,29 +47,20 @@ public class CrudCategorias extends CrudConsola<Categoria> {
 
     @Override
     public void actualizar() {
-        System.out.println("Categorias disponibles:");
         this.listar();
         System.out.print("Ingrese el ID de la categoria a actualizar: ");
         int idCategoria = scanner.nextInt();
         scanner.nextLine();
 
-        // Busco la categoria que el usuario eligio por consola para actualizar
-        Categoria categoriaActualizar = null;
-        for(Categoria categoria : this.categorias){
-            if(categoria.getId() == idCategoria){
-                categoriaActualizar = categoria;
-                break;
-            }
-        }
-
-        if(categoriaActualizar == null){
+        Categoria c = buscarCategoriaPorId(idCategoria, this.categorias);
+        if(c == null){
             System.out.println("Categoria no encontrada");
             return;
         }
 
         System.out.print("Nuevo nombre: ");
         String nuevoNombre = scanner.nextLine();
-        categoriaActualizar.setNombre(nuevoNombre);
+        c.setNombre(nuevoNombre);
         System.out.println("Categoria actualizada con exito");
 
     }
@@ -78,22 +72,32 @@ public class CrudCategorias extends CrudConsola<Categoria> {
         System.out.print("Ingrese el ID de la categoria a eliminar: ");
         int idCategoria = scanner.nextInt();
 
-        // Busco la categoria que el usuario eligio por consola para eliminar
-        Categoria categoriaEliminar = null;
-        for(Categoria categoria : this.categorias){
-            if(categoria.getId() == idCategoria){
-                categoriaEliminar = categoria;
-                break;
-            }
-        }
-
-        if(categoriaEliminar == null){
+        Categoria c = buscarCategoriaPorId(idCategoria, this.categorias);
+        if(c == null){
             System.out.println("Categoria no encontrada");
             return;
         }
 
+        // Verifico si hay algun producto que tenga la categoria que el usuario quiere eliminar
+        // En caso que haya, debe borrar primero los productos, luego puede borrar las categorias
+        boolean categoriaUtilizadaEnArticulo = false;
+        for(Producto p : this.productos){
+            if(p instanceof Articulo){
+                if(((Articulo) p).getCategoria() == c){
+                    categoriaUtilizadaEnArticulo = true;
+                    break;
+                }
+            }
+        }
+
+        if(categoriaUtilizadaEnArticulo){
+            System.out.println("No se puede eliminar. Hay articulos que usan esta categoria");
+            System.out.println("Primero debe eliminar los articulos con esta categoria");
+            return;
+        }
+
         // Elimino la categoria
-        this.categorias.remove(categoriaEliminar);
+        this.categorias.remove(c);
         System.out.println("Categoria eliminada con exito");
     }
 }
