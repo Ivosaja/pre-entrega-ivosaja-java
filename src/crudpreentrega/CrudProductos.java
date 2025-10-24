@@ -73,20 +73,22 @@ public class CrudProductos extends CrudConsola<Producto> {
     }
 
     @Override
-    public void listar() {
+    public boolean listar() {
         if(this.productos.isEmpty()){
             System.out.println("No hay productos. Crea uno");
-            return;
+            return false;
         }
         System.out.println("Productos disponibles:");
         for(Producto p : this.productos){
             System.out.println(p);
         }
+        return true;
     }
 
     @Override
     public void actualizar() {
-        this.listar();
+        if(!this.listar()) return;
+
         int idProducto = super.leerEntero("Ingrese el ID del producto a actualizar: ");
 
         // Busco el producto que desea actualizar el usuario
@@ -140,7 +142,8 @@ public class CrudProductos extends CrudConsola<Producto> {
 
     @Override
     public void eliminar() {
-        this.listar();
+        if(!this.listar()) return;
+        
         int idProducto = super.leerEntero("Ingrese el ID del producto a eliminar: ");
 
         Producto p = super.buscarProductoPorId(idProducto, this.productos);

@@ -9,7 +9,7 @@ public abstract class CrudConsola<T> {
 
     public abstract void mostrarMenu();
     public abstract void crear();
-    public abstract void listar();
+    public abstract boolean listar();
     public abstract void actualizar();
     public abstract void eliminar();
 

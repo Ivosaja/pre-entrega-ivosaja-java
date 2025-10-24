@@ -32,20 +32,22 @@ public class CrudCategorias extends CrudConsola<Categoria> {
     }
 
     @Override
-    public void listar() {
+    public boolean listar() {
         if(this.categorias.isEmpty()){
             System.out.println("No hay categorias cargadas. Crea la primera");
-            return;
+            return false;
         }
         System.out.println("Categorias disponibles:");
         for(Categoria c : this.categorias){
             System.out.println(c);
         }
+        return true;
     }
 
     @Override
     public void actualizar() {
-        this.listar();
+        if(!this.listar()) return;
+
         int idCategoria = super.leerEntero("Ingrese el ID de la categoria a actualizar: ");
 
         Categoria c = super.buscarCategoriaPorId(idCategoria, this.categorias);
@@ -62,7 +64,8 @@ public class CrudCategorias extends CrudConsola<Categoria> {
 
     @Override
     public void eliminar() {
-        this.listar();
+        if(!this.listar()) return;
+        
         int idCategoria = super.leerEntero("Ingrese el ID de la categoria a eliminar: ");
 
         Categoria c = super.buscarCategoriaPorId(idCategoria, this.categorias);

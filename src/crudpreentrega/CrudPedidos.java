@@ -76,20 +76,21 @@ public class CrudPedidos extends CrudConsola<Pedido> {
     }
 
     @Override
-    public void listar() {
+    public boolean listar() {
         if(this.pedidos.isEmpty()){
             System.out.println("No hay pedidos. Crea el primero");
-            return;
+            return false;
         }
         System.out.println("Pedidos hechos:");
         for(Pedido p : this.pedidos){
             System.out.println(p);
         }
+        return true;
     }
 
     @Override
     public void actualizar() {
-        this.listar();
+        if(!this.listar()) return;
         
         int idPedido = super.leerEntero("Ingrese el ID del pedido que desea actualizar: ");
         Pedido p = super.buscarPedidoPorId(idPedido, this.pedidos);
@@ -108,7 +109,7 @@ public class CrudPedidos extends CrudConsola<Pedido> {
 
     @Override
     public void eliminar() {
-        this.listar();
+        if(!this.listar()) return;
         
         int idPedido = super.leerEntero("Ingrese el ID del pedido a eliminar: ");
         Pedido p = super.buscarPedidoPorId(idPedido, this.pedidos);
