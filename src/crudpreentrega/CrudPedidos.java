@@ -28,6 +28,7 @@ public class CrudPedidos extends CrudConsola<Pedido> {
             System.out.println("No hay productos disponibles para crear un pedido. Crea un producto antes");
             return;
         }
+        System.out.println("Productos disponibles:");
         for(Producto p : this.productos){
             System.out.println(p);
         }
