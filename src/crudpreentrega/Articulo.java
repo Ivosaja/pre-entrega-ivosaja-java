@@ -23,7 +23,7 @@ public class Articulo extends Producto{
 
     @Override
     public String toString(){
-        return "Articulo: " + this.getNombre() + " | ID: " + this.getId() + " | Precio: $" + this.getPrecio() + " | Categoria: " + this.categoria;
+        return "Articulo: " + this.getNombre() + " | ID: " + this.getId() + " | Precio: $" + this.getPrecio() + " | Categoria: " + this.categoria.getNombre() + " - ID: " + this.categoria.getId();
     }
 
     @Override

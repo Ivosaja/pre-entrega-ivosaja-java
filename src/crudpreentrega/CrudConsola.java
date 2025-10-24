@@ -63,4 +63,13 @@ public abstract class CrudConsola<T> {
         return null;
     }
 
+    protected Pedido buscarPedidoPorId(int idPedido, ArrayList<Pedido> pedidos){
+        for(Pedido p: pedidos){
+            if(p.getId() == idPedido){
+                return p;
+            }
+        }
+        return null;
+    }
+
 }

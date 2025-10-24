@@ -5,10 +5,12 @@ import java.util.ArrayList;
 public class CrudProductos extends CrudConsola<Producto> {
     private ArrayList<Producto> productos;
     private ArrayList<Categoria> categorias;
+    private ArrayList<Pedido> pedidos;
 
-    public CrudProductos(ArrayList<Producto> productos, ArrayList<Categoria> categorias){
+    public CrudProductos(ArrayList<Producto> productos, ArrayList<Categoria> categorias, ArrayList<Pedido> pedidos){
         this.productos = productos;
         this.categorias = categorias;
+        this.pedidos = pedidos;
     }
 
     @Override
@@ -144,6 +146,25 @@ public class CrudProductos extends CrudConsola<Producto> {
         Producto p = super.buscarProductoPorId(idProducto, this.productos);
         if(p == null){
             System.out.println("Producto no encontrado");
+            return;
+        }
+
+        boolean yaExisteEnPedido = false;
+        for(Pedido pedido : this.pedidos){
+            for(ItemPedido item : pedido.getItems()){
+                if(item.getProducto().getId() == p.getId()){
+                    yaExisteEnPedido = true;
+                    break;
+                }
+            }
+            if(yaExisteEnPedido){
+                break;
+            }
+        }
+
+        if(yaExisteEnPedido){
+            System.out.println("No puedes eliminar este producto porque ya se encuentra en un pedido");
+            System.out.println("Primero debe eliminar los pedidos que lo contienen");
             return;
         }
 
