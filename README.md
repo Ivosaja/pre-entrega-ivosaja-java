@@ -1,4 +1,4 @@
-# CRUD en Consola con Java
+# CRUD de Productos, Categorias y Pedidos en Consola con Java
 
 Proyecto realizado en Java como practica de Programacion Orientada a Objetos.
 
